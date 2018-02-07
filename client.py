@@ -21,7 +21,6 @@ import socket
 #             data = str(data).upper()
 #             print ("sending: " + str(data))
 #             conn.send(data.encode())
-
 #     conn.close()
 
 
@@ -37,7 +36,17 @@ def main():
     message = input("--> ")
 
     while message != "q":
-        sock.send(message.encode('utf-8'))
+        # trying to send
+        try:
+            sock.send(message.encode('utf-8'))
+
+        # TCP connection broke
+        except socket.error, e:
+            if e.errno == errno.ECONNRESET:
+                # Handle disconnection -- close & reopen socket etc.
+            else:
+                # Other error, re-raise
+                raise
         data = sock.recv(1024).decode('utf-8')
         print("Recieved from server:", data)
         message = input("--> ")
