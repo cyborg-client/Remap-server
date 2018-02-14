@@ -1,8 +1,13 @@
 package tcpHttpClient
-/*
+
+import
+(
+	"../dataTypes"
+)
+
 func tcpMain(
-	statusTcpCh chan<- httpTcpStatusMessage,
-	startStopTcpCh <-chan tcpHttpStatus,
+	statusTcpCh chan<- statusTcp,
+	tcpDataStream chan<- dataTypes.TcpDataStream,
+	startStopTcpCh <-chan startStopTcp,
 	){
 }
-*/

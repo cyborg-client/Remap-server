@@ -8,10 +8,12 @@ const
 (
 	Start = iota
 	Stop
-	ChangeFrequency
+	Stimulate
 )
+
 type ClientRequest struct
 {
 	Request int
+	Options map[string]int
 	payload []byte
 }

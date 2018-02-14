@@ -16,15 +16,21 @@ func requestRemoteServer(start bool) (bool) {
 	}else {
 		url = "http://" + config.MEAServerAddress + "/stop"
 	}
-	var jsonStr = []byte(`{"sample_rate":"1000", "segment_length":"10"}`)
+	var jsonStr = []byte(`{"sample_rate":1000, "segment_length":10}`)
 	buf := bytes.NewBuffer(jsonStr)
-	resp, err := http.Post(url, "application/json", buf) // TODO: Make POST
+	resp, err := http.Post(url, "application/json", buf)
 	if err != nil {
 		// Error
 		log.Println("Error in http.go: ", err)
 		return false
 	}
 	defer resp.Body.Close() // Close HTTP when done
+
+	bufT := new(bytes.Buffer)
+	bufT.ReadFrom(resp.Body)
+	newStr := bufT.String()
+	fmt.Println(newStr)
+
 	fmt.Println(resp.StatusCode)
 	if resp.StatusCode == 200 {
 		return true
@@ -39,15 +45,19 @@ func httpMain(
 	startStopTcpCh chan<- startStopTcp,
 	tcpHttpClientStatusCh chan<- dataTypes.TcpHttpClientStatus,
 ) {
-	select {
-	case req := <-clientRequestCh:
-		if req.Request == dataTypes.Start {
-			fmt.Println("start")
-			if requestRemoteServer(true){
-			}
+	for{
+		select {
+		case req := <-clientRequestCh:
+			if req.Request == dataTypes.Start {
+				fmt.Println("start")
+				if requestRemoteServer(true){
+				}
 
-		} else if req.Request == dataTypes.Stop {
-			fmt.Println("Stop")
+			} else if req.Request == dataTypes.Stop {
+				fmt.Println("Stop")
+				requestRemoteServer(false)
+			}
 		}
 	}
+
 }
