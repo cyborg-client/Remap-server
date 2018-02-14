@@ -1,15 +1,15 @@
 package tcpHttpClient
 
-type httpTcpStatusMessage int
+type statusTcp int
 const
 (
-	start httpTcpStatusMessage = iota
+	start statusTcp = iota
 	stop
 )
 
-type tcpHttpStatus int
+type startStopTcp int
 // TODO: Fill inn proper statuses
 const
 (
-	status1 tcpHttpStatus = iota
+	status1 startStopTcp = iota
 )

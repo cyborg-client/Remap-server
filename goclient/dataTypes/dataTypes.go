@@ -1,6 +1,6 @@
 package dataTypes
 
-type TcpHttpClientData []int
+type TcpDataStream []int
 // TODO: This might be a struct instead of int
 type TcpHttpClientStatus int
 
@@ -10,7 +10,7 @@ const
 	Stop
 	ChangeFrequency
 )
-type ClientHttpServerRequest struct
+type ClientRequest struct
 {
 	Request int
 	payload []byte
