@@ -17,7 +17,12 @@ func requestRemoteServer(start bool) (bool) {
 		url = "http://" + config.MEAServerAddress + "/stop"
 	}
 	var jsonStr = []byte(`{"sample_rate":1000, "segment_length":10}`)
-	buf := bytes.NewBuffer(jsonStr)
+	var buf *bytes.Buffer
+	if(start){
+		buf = bytes.NewBuffer(jsonStr)
+	}else{
+		buf = bytes.NewBuffer([]byte(``))
+	}
 	resp, err := http.Post(url, "application/json", buf)
 	if err != nil {
 		// Error
