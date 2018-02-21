@@ -12,7 +12,7 @@ func main() {
 	 tcpHttpClientStatusCh := make(chan dataTypes.TcpHttpClientStatus)
 	 clientRequestCh := make(chan dataTypes.ClientRequest)
 
-	 go tcpHttpClient.TcpHttpClientMain(tcpDataStreamCh, tcpHttpClientStatusCh, clientRequestCh)
+	 go tcphttpclient.TcpHttpClientMain(tcpDataStreamCh, tcpHttpClientStatusCh, clientRequestCh)
 
 	 testConfig := make(map[string]int)
 	 testConfig["sample_rate"] = 1000
