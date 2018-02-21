@@ -4,13 +4,28 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+func GetData(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	for i, item := range params {
+		fmt.Fprintf(w, "(GetData) Key: %v, value: %v", i, item)
+	}
+}
+
+func Change(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	for i, item := range params {
+		fmt.Fprintf(w, "(GetData) Key: %v, value: %v", i, item)
+	}
 }
 
 func RobotServerMain() {
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router := mux.NewRouter()
+	router.HandleFunc("/data/{req}", GetData).Methods("GET")
+	// router.HandleFunc("/people/{id}", CreatePerson).Methods("POST")
+	// router.HandleFunc("/people/{id}", DeletePerson).Methods("DELETE")
+	log.Fatal(http.ListenAndServe(":8800", router))
 }
