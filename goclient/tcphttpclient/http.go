@@ -10,7 +10,7 @@ import (
 	"encoding/json"
 )
 
-// Struct representing the data which is sent to the MEA Server.
+// requestOptions Struct representing the data which is sent to the MEA Server.
 type requestOptions struct {
 	SampleRate int `json:"sample_rate""`
 	SegmentLength int `json:"segment_length""`
