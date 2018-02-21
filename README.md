@@ -1,2 +1,2 @@
-# eit-client
-Cyborg project - EiT
+# EiT-Client
+
