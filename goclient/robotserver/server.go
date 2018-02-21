@@ -22,7 +22,6 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 			// TODO: call buffer.GetDataEveryMs(everyMs, ...)
 			fmt.Printf("Receiving data request for every %v ms\n", everyMs)
 		}
-
 	}
 }
 
