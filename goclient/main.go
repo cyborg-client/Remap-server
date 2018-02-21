@@ -20,5 +20,5 @@ func main() {
 	// select {}
 
 	// Robot Server
-	robotserver.RobotServerMain()
+	robotserver.Main()
 }
