@@ -1,4 +1,4 @@
-package tcpHttpClient
+package tcphttpclient
 
 import(
 	"../dataTypes"

@@ -3,7 +3,7 @@ package main
 import
 (
 	"./dataTypes"
-	"./tcpHttpClient"
+	"./tcphttpclient"
 )
 
 func main() {

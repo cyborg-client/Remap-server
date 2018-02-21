@@ -1,4 +1,4 @@
-package tcpHttpClient
+package tcphttpclient
 
 type statusTcp int
 const
