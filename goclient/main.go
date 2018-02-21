@@ -2,8 +2,8 @@ package main
 
 import
 (
-	"./dataTypes"
-	"./tcpHttpClient"
+	"./datatypes"
+	"./tcphttpclient"
 )
 
 func main() {

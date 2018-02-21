@@ -1,8 +1,8 @@
-package tcpHttpClient
+package tcphttpclient
 
 import
 (
-	"../dataTypes"
+	"../datatypes"
 )
 
 func tcpMain(
