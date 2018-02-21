@@ -1,5 +1,6 @@
 
 # Created by https://www.gitignore.io/api/go,python,intellij
+.DS_Store
 
 ### Go ###
 # Binaries for programs and plugins
