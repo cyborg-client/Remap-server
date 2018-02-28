@@ -1,7 +1,7 @@
 package tcphttpclient
 
 import(
-	"github.com/vegardbotnen/EiT-Client/datatypes"
+	"github.com/cyborg-client/client/datatypes"
 )
 
 func TcpHttpClientMain(
