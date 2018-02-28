@@ -5,8 +5,8 @@ import(
 )
 
 func TcpHttpClientMain(
-	tcpDataStreamCh chan<- datatypes.TcpDataStream,
-	tcpHttpClientStatusCh chan<- datatypes.TcpHttpClientStatus,
+	tcpDataStreamCh chan<- TcpDataStream,
+	tcpHttpClientStatusCh chan<- TcpHttpClientStatus,
 	clientRequestCh <-chan datatypes.ClientRequest,
 	) {
 		// Channels
@@ -16,6 +16,8 @@ func TcpHttpClientMain(
 		statusTcpCh := make(chan statusTcp)
 
 		// Create goroutines
-		go httpMain(statusTcpCh, clientRequestCh, startStopTcpCh, tcpHttpClientStatusCh)
-		//go tcpMain(statusTcpCh, startStopTcpCh)
+		//go httpMain(statusTcpCh, clientRequestCh, startStopTcpCh, tcpHttpClientStatusCh)
+		go tcpMain(statusTcpCh, tcpDataStreamCh, startStopTcpCh)
+		startStopTcpCh <- Start
+
 }

@@ -1,15 +1,7 @@
 package datatypes
 
-type TcpDataStream []int
-// TODO: This might be a struct instead of int
-type TcpHttpClientStatus int
 
-const
-(
-	Start = iota
-	Stop
-	Stimulate
-)
+// TODO: This might be a struct instead of int
 
 type ClientRequest struct
 {

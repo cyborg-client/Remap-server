@@ -8,16 +8,14 @@ import
 
 func main() {
 	// Make channels
-	 tcpDataStreamCh := make(chan datatypes.TcpDataStream)
-	 tcpHttpClientStatusCh := make(chan datatypes.TcpHttpClientStatus)
+	 tcpDataStreamCh := make(chan tcphttpclient.TcpDataStream)
+	 tcpHttpClientStatusCh := make(chan tcphttpclient.TcpHttpClientStatus)
 	 clientRequestCh := make(chan datatypes.ClientRequest)
 
 	 go tcphttpclient.TcpHttpClientMain(tcpDataStreamCh, tcpHttpClientStatusCh, clientRequestCh)
-	 myReq := datatypes.ClientRequest{Request:datatypes.Start}
-	 myReqStop := datatypes.ClientRequest{Request:datatypes.Stop}
-	 clientRequestCh<-myReq
-	 clientRequestCh<-myReqStop
-	 clientRequestCh<-myReq
-	 clientRequestCh<-myReqStop
+
+	 //myReq := datatypes.ClientRequest{Request:tcphttpclient.Start}
+	 //clientRequestCh<-myReq
+
 	 select{}
 }

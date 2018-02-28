@@ -1,5 +1,17 @@
 package tcphttpclient
 
+type TcpDataStream []int
+
+type TcpHttpClientStatus int
+
+const
+(
+	Start = iota
+	Stop
+	Stimulate
+)
+
+
 type statusTcp int
 const
 (

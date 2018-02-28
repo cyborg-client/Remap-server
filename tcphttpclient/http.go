@@ -62,17 +62,18 @@ func httpMain(
 	statusTcpCh <-chan statusTcp,
 	clientRequestCh <-chan datatypes.ClientRequest,
 	startStopTcpCh chan<- startStopTcp,
-	tcpHttpClientStatusCh chan<- datatypes.TcpHttpClientStatus,
+	tcpHttpClientStatusCh chan<- TcpHttpClientStatus,
 ) {
 	for{
 		select {
 		case req := <-clientRequestCh:
-			if req.Request == datatypes.Start {
+			if req.Request == Start {
 				fmt.Println("start")
-				if requestRemoteServer(true, req.Options["sample_rate"], req.Options["segment_length"]){
+				if requestRemoteServer(true, config.SampleRate, config.SegmentLength){
+					startStopTcpCh <- Start
 				}
 
-			} else if req.Request == datatypes.Stop {
+			} else if req.Request == Stop {
 				fmt.Println("Stop")
 				requestRemoteServer(false, 0, 0)
 			}
