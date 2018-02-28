@@ -29,5 +29,6 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 func Main(port string) {
 	router := mux.NewRouter()
 	router.HandleFunc("/data/{every-ms}", GetData).Methods("GET")
+	fmt.Printf("Starting localhost at port: %v. REST: '/data/<millisec>'\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
