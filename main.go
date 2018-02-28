@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/cyborg-client/client/goclient/config"
-	"github.com/cyborg-client/client/goclient/robotserver"
+	"github.com/cyborg-client/client/config"
+	"github.com/cyborg-client/client/robotserver"
 )
 
 func main() {
