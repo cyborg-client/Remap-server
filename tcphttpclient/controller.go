@@ -1,13 +1,13 @@
 package tcphttpclient
 
 import(
-	"../dataTypes"
+	"github.com/vegardbotnen/EiT-Client/datatypes"
 )
 
 func TcpHttpClientMain(
-	tcpDataStreamCh chan<- dataTypes.TcpDataStream,
-	tcpHttpClientStatusCh chan<- dataTypes.TcpHttpClientStatus,
-	clientRequestCh <-chan dataTypes.ClientRequest,
+	tcpDataStreamCh chan<- datatypes.TcpDataStream,
+	tcpHttpClientStatusCh chan<- datatypes.TcpHttpClientStatus,
+	clientRequestCh <-chan datatypes.ClientRequest,
 	) {
 		// Channels
 		// HTTP -> TCP

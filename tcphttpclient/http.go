@@ -1,8 +1,8 @@
 package tcphttpclient
 
 import (
-	"../dataTypes"
-	"../config"
+	"github.com/vegardbotnen/EiT-Client/datatypes"
+	"github.com/vegardbotnen/EiT-Client/config"
 	"fmt"
 	"net/http"
 	"log"
@@ -60,19 +60,19 @@ func requestRemoteServer(start bool, sampleRate int, segmentLength int) (bool) {
 
 func httpMain(
 	statusTcpCh <-chan statusTcp,
-	clientRequestCh <-chan dataTypes.ClientRequest,
+	clientRequestCh <-chan datatypes.ClientRequest,
 	startStopTcpCh chan<- startStopTcp,
-	tcpHttpClientStatusCh chan<- dataTypes.TcpHttpClientStatus,
+	tcpHttpClientStatusCh chan<- datatypes.TcpHttpClientStatus,
 ) {
 	for{
 		select {
 		case req := <-clientRequestCh:
-			if req.Request == dataTypes.Start {
+			if req.Request == datatypes.Start {
 				fmt.Println("start")
 				if requestRemoteServer(true, req.Options["sample_rate"], req.Options["segment_length"]){
 				}
 
-			} else if req.Request == dataTypes.Stop {
+			} else if req.Request == datatypes.Stop {
 				fmt.Println("Stop")
 				requestRemoteServer(false, 0, 0)
 			}
