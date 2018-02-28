@@ -1,8 +1,8 @@
 package tcphttpclient
 
 import (
-	"github.com/vegardbotnen/EiT-Client/datatypes"
-	"github.com/vegardbotnen/EiT-Client/config"
+	"github.com/cyborg-client/client/datatypes"
+	"github.com/cyborg-client/client/config"
 	"fmt"
 	"net/http"
 	"log"

@@ -2,8 +2,8 @@ package main
 
 import
 (
-	"github.com/vegardbotnen/EiT-Client/datatypes"
-	"github.com/vegardbotnen/EiT-Client/tcphttpclient"
+	"github.com/cyborg-client/client/datatypes"
+	"github.com/cyborg-client/client/tcphttpclient"
 )
 
 func main() {
