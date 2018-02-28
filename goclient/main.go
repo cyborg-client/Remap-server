@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./config"
 	"./robotserver"
 )
 
@@ -20,5 +21,5 @@ func main() {
 	// select {}
 
 	// Robot Server
-	robotserver.Main()
+	robotserver.Main(config.RobotServerPort)
 }

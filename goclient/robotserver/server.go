@@ -26,8 +26,8 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 }
 
 // Main is main func in robotserver-package
-func Main() {
+func Main(port string) {
 	router := mux.NewRouter()
 	router.HandleFunc("/data/{every-ms}", GetData).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8800", router))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
