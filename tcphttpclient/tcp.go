@@ -2,12 +2,12 @@ package tcphttpclient
 
 import
 (
-	"../datatypes"
+	"github.com/vegardbotnen/EiT-Client/datatypes"
 )
 
 func tcpMain(
 	statusTcpCh chan<- statusTcp,
-	tcpDataStream chan<- dataTypes.TcpDataStream,
+	tcpDataStream chan<- datatypes.TcpDataStream,
 	startStopTcpCh <-chan startStopTcp,
 	){
 }
