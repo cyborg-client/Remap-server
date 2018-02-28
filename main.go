@@ -2,8 +2,10 @@ package main
 
 import
 (
+	//"github.com/cyborg-client/client/analysis"
 	"github.com/cyborg-client/client/datatypes"
 	"github.com/cyborg-client/client/tcphttpclient"
+
 )
 
 func main() {
@@ -20,4 +22,7 @@ func main() {
 	 clientRequestCh<-myReq
 	 clientRequestCh<-myReqStop
 	 select{}
+
+	 //run data parser
+	 //analysis.Main()
 }
