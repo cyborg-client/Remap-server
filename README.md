@@ -7,11 +7,13 @@ get localhost:<port>/data/<every-ms>
 ```
 > `every-ms` specifies the interval (in millisec) of received data packages
 
-## Dependencies
-### Gorilla/mux
-install: 
+### Returned Data Format
+The server returns an array with 60 elements (one per multielectrode channel).
 ```
-go get -u github.com/gorilla/mux
+[<ch1>, <ch2>,<ch3>, ... , <ch60>]
 ```
-More docs: 
-https://github.com/gorilla/mux#install
+Example:
+```
+[0, 1, 1, 0, 0, ... , 1, 0, 0]
+```
+> A `1`/`0` means that a spike occured, or not, in that time segment.
