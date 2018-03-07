@@ -21,11 +21,11 @@ func main() {
 	 clientRequestCh<-myReqS
 	 clientRequestCh<-myReq
 
-	 select{}
+	 //select{}
 
 	 //run data parser
 	timeStampChannel := make(chan []byte, 100)
-	go analysis.Main(timeStampChannel)
+	go analysis.Main(timeStampChannel, tcpDataStreamCh)
 	go robotserver.Main(timeStampChannel)
 	time.Sleep(5000*time.Millisecond)
 }
