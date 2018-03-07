@@ -26,7 +26,7 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 }
 
 // Main is main func in robotserver-package
-func Main(port string) {
+func MainD(port string) {
 	router := mux.NewRouter()
 	router.HandleFunc("/data/{every-ms}", GetData).Methods("GET")
 	fmt.Printf("Starting localhost at port: %v. REST: '/data/<millisec>'\n", port)

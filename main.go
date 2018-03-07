@@ -1,13 +1,11 @@
 package main
 import
 (
-	// "github.com/cyborg-client/client/analysis"
-	// "github.com/cyborg-client/client/datatypes"
-	// "github.com/cyborg-client/client/tcphttpclient"
-
+	 "github.com/cyborg-client/client/datatypes"
+	 "github.com/cyborg-client/client/tcphttpclient"
 	"github.com/cyborg-client/client/analysis"
-	"github.com/cyborg-client/client/buffer"
 	"time"
+	"github.com/cyborg-client/client/robotserver"
 )
 
 func main() {
@@ -24,10 +22,10 @@ func main() {
 	 clientRequestCh<-myReq
 
 	 select{}
-*/
+
 	 //run data parser
 	timeStampChannel := make(chan []byte, 100)
 	go analysis.Main(timeStampChannel)
-	go buffer.Main(timeStampChannel)
+	go robotserver.Main(timeStampChannel)
 	time.Sleep(5000*time.Millisecond)
 }
