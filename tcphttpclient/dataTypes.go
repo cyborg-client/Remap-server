@@ -1,5 +1,19 @@
 package tcphttpclient
 
+import "github.com/cyborg-client/client/config"
+
+type TcpDataStream [60 * config.SegmentLength]int32
+
+type Status int
+
+const
+(
+	Start = iota
+	Stop
+	Stimulate
+)
+
+
 type statusTcp int
 const
 (
