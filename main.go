@@ -36,5 +36,5 @@ func main() {
 	go analysis.Main(timeStampChannel)
 	go buffer.Main(timeStampChannel)
 	//robotserver.Main(config.RobotServerPort)
-	time.Sleep(5000*time.Millisecond)
+	time.Sleep(20000*time.Millisecond)
 }

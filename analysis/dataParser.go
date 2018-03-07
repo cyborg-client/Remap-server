@@ -17,9 +17,10 @@ func check(e error) {
 
 // TODO: find out how to syncronise all channels
 func Main(timeStampChannel chan<- []byte) {
-	dat, err := os.Open("/Users/jonasdammen/Development/code/src/github.com/cyborg-client/client/sampledata/2017-10-20_MEA2_100rows_1sec.csv")
-	check(err)
+
 	for {
+		dat, err := os.Open("/Users/jonasdammen/Development/code/src/github.com/cyborg-client/client/sampledata/2017-10-20_MEA2_100rows_1sec.csv")
+		check(err)
 		reader := csv.NewReader(bufio.NewReader(dat))
 		var timestampArray= make([][]byte, 0, 10)
 		i := 0
