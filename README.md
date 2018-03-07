@@ -9,7 +9,7 @@ get localhost:<port>/data/<every-ms>
 
 ## Dependencies
 ### Gorilla/mux
-#####install: 
+install: 
 go get -u github.com/gorilla/mux
-#####More docs: 
+More docs: 
 https://github.com/gorilla/mux#install
