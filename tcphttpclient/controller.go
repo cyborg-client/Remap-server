@@ -1,23 +1,30 @@
 package tcphttpclient
 
-import(
+import (
+	"fmt"
 	"github.com/cyborg-client/client/datatypes"
 )
 
-func TcpHttpClientMain(
-	tcpDataStreamCh chan<- TcpDataStream,
-	tcpHttpClientStatusCh chan<- TcpHttpClientStatus,
+func TcpHttpClient(
+	tcpDataStreamCh chan TcpDataStream,
+	tcpHttpClientStatusCh chan<- Status,
 	clientRequestCh <-chan datatypes.ClientRequest,
-	) {
-		// Channels
-		// HTTP -> TCP
-		startStopTcpCh := make(chan startStopTcp)
-		// TCP -> HTTP
-		statusTcpCh := make(chan statusTcp)
+) {
+	// Channels
+	// HTTP -> TCP
+	startStopTcpCh := make(chan startStopTcp)
 
-		// Create goroutines
-		//go httpMain(statusTcpCh, clientRequestCh, startStopTcpCh, tcpHttpClientStatusCh)
-		go tcpMain(statusTcpCh, tcpDataStreamCh, startStopTcpCh)
-		startStopTcpCh <- Start
+	// Create goroutines
+	go httpMain(clientRequestCh, startStopTcpCh, tcpHttpClientStatusCh)
+	go tcpMain(tcpDataStreamCh, startStopTcpCh)
+
+	for {
+		select {
+		case a := <-tcpDataStreamCh:
+			fmt.Println(a)
+
+		}
+	}
+	select {}
 
 }
