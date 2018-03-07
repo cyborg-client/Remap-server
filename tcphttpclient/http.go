@@ -1,37 +1,49 @@
 package tcphttpclient
 
 import (
-	"github.com/cyborg-client/client/datatypes"
-	"github.com/cyborg-client/client/config"
-	"fmt"
-	"net/http"
-	"log"
 	"bytes"
+	"encoding/json"
+	"github.com/cyborg-client/client/config"
+	"github.com/cyborg-client/client/datatypes"
+	"log"
+	"net/http"
 )
 
-func requestRemoteServer(start bool) (bool) {
+// requestOptions Struct representing the data which is sent to the MEA Server.
+type requestOptions struct {
+	SampleRate    int `json:"sample_rate""`
+	SegmentLength int `json:"segment_length""`
+}
+
+// requestRemoteServer Sends a Start / Stop post request to the MEA HTTP server.
+func requestRemoteServer(start bool, sampleRate int, segmentLength int) bool {
+	// Generate the URI based on start parameter
 	var url string
 	if start {
-		url = "http://" + config.MEAServerAddress + "/start"
-	}else {
-		url = "http://" + config.MEAServerAddress + "/stop"
+		url = "http://" + config.MEAServerAddress + ":" + config.MEAServerHTTPPort + "/start"
+	} else {
+		url = "http://" + config.MEAServerAddress + ":" + config.MEAServerHTTPPort + "/stop"
 	}
-	var jsonStr = []byte(`{"sample_rate":1000, "segment_length":10}`)
+
+	// Generate json
+	reqOption := requestOptions{SampleRate: sampleRate, SegmentLength: segmentLength}
+	b, err := json.Marshal(reqOption)
+	if err != nil {
+		log.Println("Error in http.go: ", err)
+		panic(err)
+	}
+
+	var jsonStr = []byte(b)
 	buf := bytes.NewBuffer(jsonStr)
 	resp, err := http.Post(url, "application/json", buf)
 	if err != nil {
-		// Error
 		log.Println("Error in http.go: ", err)
-		return false
+		panic(err)
 	}
 	defer resp.Body.Close() // Close HTTP when done
 
-	bufT := new(bytes.Buffer)
-	bufT.ReadFrom(resp.Body)
-	newStr := bufT.String()
-	fmt.Println(newStr)
-
-	fmt.Println(resp.StatusCode)
+	// If HTTP response = 200 => success
+	// if HTTP response != 200 => failure
 	if resp.StatusCode == 200 {
 		return true
 	} else {
@@ -40,22 +52,19 @@ func requestRemoteServer(start bool) (bool) {
 }
 
 func httpMain(
-	statusTcpCh <-chan statusTcp,
 	clientRequestCh <-chan datatypes.ClientRequest,
 	startStopTcpCh chan<- startStopTcp,
-	tcpHttpClientStatusCh chan<- datatypes.TcpHttpClientStatus,
+	tcpHttpClientStatusCh chan<- Status,
 ) {
-	for{
+	for {
 		select {
 		case req := <-clientRequestCh:
-			if req.Request == datatypes.Start {
-				fmt.Println("start")
-				if requestRemoteServer(true){
+			if req.Request == Start {
+				if requestRemoteServer(true, config.SampleRate, config.SegmentLength) {
+					startStopTcpCh <- Start
 				}
-
-			} else if req.Request == datatypes.Stop {
-				fmt.Println("Stop")
-				requestRemoteServer(false)
+			} else if req.Request == Stop {
+				requestRemoteServer(false, 0, 0)
 			}
 		}
 	}

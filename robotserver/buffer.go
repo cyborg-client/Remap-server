@@ -1,4 +1,4 @@
-package buffer
+package robotserver
 import "fmt"
 
 // Main is the main function in buffer package
