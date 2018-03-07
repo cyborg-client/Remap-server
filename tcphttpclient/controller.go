@@ -1,7 +1,7 @@
 package tcphttpclient
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/cyborg-client/client/datatypes"
 )
 
@@ -20,8 +20,8 @@ func TcpHttpClient(
 
 	for {
 		select {
-		case a := <-tcpDataStreamCh:
-			fmt.Println(a)
+		//case a := <-tcpDataStreamCh:
+			//fmt.Println(a)
 
 		}
 	}
