@@ -16,8 +16,7 @@ func check(e error) {
 }
 
 // TODO: find out how to syncronise all channels
-func Main() {
-	timeStampChannel := make(chan []byte)
+func Main(timeStampChannel chan<- []byte) {
 	dat, err := os.Open("/Users/jonasdammen/Development/code/src/github.com/cyborg-client/client/sampledata/2017-10-20_MEA2_100rows_1sec.csv")
 	check(err)
 	reader := csv.NewReader(bufio.NewReader(dat))
@@ -25,7 +24,6 @@ func Main() {
 	i := 0
 	cols := 0
 	reader.Read() // first line is info only
-
 	for {
 		record, err := reader.Read()
 		if i == 0{
@@ -37,7 +35,7 @@ func Main() {
 			fmt.Println("Breaking due to EOF")
 			break
 		}
-		fmt.Println("reading values")
+		//fmt.Println("reading values")
 
 		for j := range record {
 			if j != 0 { // first value is timestamp
@@ -58,14 +56,11 @@ func Main() {
 		fmt.Println("TSA current length")
 		fmt.Println(len(timestampArray))
 		*/
-		fmt.Println("Pushing one array to channel")
+		//fmt.Println("Pushing one array to channel")
+		//fmt.Println(timestampArray[i])
 		timeStampChannel <- timestampArray[i]
 		i++
 	}
-
-
-
-
+	fmt.Println("Sent ", i, " lines");
 	//check(err)	r := csv.NewReader(strings.NewReader(in))
-
 }
