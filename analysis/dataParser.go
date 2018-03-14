@@ -1,8 +1,6 @@
 package analysis
 
 import (
-	"fmt"
-	"github.com/cyborg-client/client/tcphttpclient"
 	"bufio"
 	"encoding/csv"
 	"io"
@@ -17,7 +15,7 @@ func check(e error) {
 }
 
 // TODO: find out how to syncronise all channels
-func Main(timeStampChannel chan<- []byte) {
+func Main(timeStampChannel chan<- Timestampdata) {
 	dat, err := os.Open("./sampledata/2017-10-20_MEA2_100rows_1sec.csv")
 	check(err)
 	reader := csv.NewReader(bufio.NewReader(dat))

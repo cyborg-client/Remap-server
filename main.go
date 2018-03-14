@@ -25,8 +25,8 @@ func main() {
 	clientRequestCh <- myReq
 
 	//run data parser
-	timeStampChannel := make(chan []byte, 10)
-	go analysis.Main(timeStampChannel)
-	go robotserver.Main(config.RobotServerPort, timeStampChannel)
+	timestampDataCh := make(chan analysis.Timestampdata, 10)
+	go analysis.Main(timestampDataCh)
+	go robotserver.Main(config.RobotServerPort, timestampDataCh)
 	select {}
 }

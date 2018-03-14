@@ -7,9 +7,10 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/cyborg-client/client/analysis"
 )
 
-var serverCh <-chan []byte
+var timestampCh <-chan analysis.Timestampdata
 
 // GetData parses REST request
 func GetData(w http.ResponseWriter, r *http.Request) {
@@ -30,9 +31,9 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 }
 
 // Main is main func in robotserver-package
-func Main(port string, ch <-chan []byte) {
+func Main(port string, timestampdataChLocal <-chan analysis.Timestampdata) {
 	// global chan
-	serverCh = ch
+	timestampCh = timestampdataChLocal
 	router := mux.NewRouter()
 	router.HandleFunc("/data/{every-ms}", GetData).Methods("GET")
 	fmt.Printf("Starting localhost at port: %v. REST: '/data/<millisec>'\n", port)
