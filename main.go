@@ -6,9 +6,12 @@ import
 	"github.com/cyborg-client/client/analysis"
 	"time"
 	"github.com/cyborg-client/client/robotserver"
+	"fmt"
 )
 
 func main() {
+	fmt.Print("MAIN")
+
 	// Make channels
 	 tcpDataStreamCh := make(chan tcphttpclient.TcpDataStream, 100)
 	 tcpHttpClientStatusCh := make(chan tcphttpclient.Status)
@@ -24,7 +27,7 @@ func main() {
 	 //select{}
 
 	 //run data parser
-	timeStampChannel := make(chan []byte, 100)
+	timeStampChannel := make(chan []int64, 100)
 	go analysis.Main(timeStampChannel, tcpDataStreamCh)
 	go robotserver.Main(timeStampChannel)
 	time.Sleep(5000*time.Millisecond)

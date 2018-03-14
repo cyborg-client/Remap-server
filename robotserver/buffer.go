@@ -2,7 +2,7 @@ package robotserver
 import "fmt"
 
 // Main is the main function in buffer package
-func Main(timeStampChannel <-chan []byte) {
+func Main(timeStampChannel <-chan []int64) {
 	fmt.Println("dmnlk")
 	counter := 0;
 	for array := range timeStampChannel {
