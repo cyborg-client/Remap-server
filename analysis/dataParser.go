@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"github.com/cyborg-client/client/tcphttpclient"
+	"fmt"
 )
 
 func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
@@ -16,14 +17,17 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 		effect = 0.1
 		threshold = 5000000
 		timeStamp = 0
-
+		var sum int32
 		for {
 			record := <-tcpDataStreamCh
 			timeStamp += 100
+			if(timeStamp > 1000) {
+				fmt.Print(sum);
+			}
 			for j := range record {
-				val := record[j]
+				val := -record[j]
 				// UPDATE FILTER
-				average = (1 - effect) * average + effect * float64(-val)
+				average = ((1 - effect) * average) + (effect * float64(val))
 				diff := float64(val) - average
 
 				// SEND TIMESTAMP
