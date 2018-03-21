@@ -1,10 +1,17 @@
 package robotserver
 
+import (
+	"github.com/satori/go.uuid"
+)
+
 func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan splitterRequest, deleteClientCh <-chan splitterRequest) {
-	activeClients := make(map[int]splitterRequest)
+	activeClients := make(map[uuid.UUID]splitterRequest)
 	for {
 		select {
 		case client := <-registerNewClientCh:
+			if _, ok := activeClients[client.ID]; ok {
+				panic("UUID already exists")
+			}
 			activeClients[client.ID] = client
 		case msg := <-timestampdataCh:
 			for _, v := range activeClients {
@@ -19,7 +26,7 @@ func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan spl
 func Main(timestampdataCh <-chan []int64) {
 	registerNewClientCh := make(chan splitterRequest)
 	deleteClientCh := make(chan splitterRequest)
-	go serverMain(timestampdataCh)
+	go serverMain(timestampdataCh, registerNewClientCh, deleteClientCh)
 	go splitterMain(timestampdataCh, registerNewClientCh, deleteClientCh)
 	select {}
 }
