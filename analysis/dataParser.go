@@ -15,6 +15,7 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 		average = 0
 		effect = 0.1
 		threshold = 5000000
+		timeStamp = 0
 
 		for {
 			record := <-tcpDataStreamCh
