@@ -11,7 +11,7 @@ import (
 	"github.com/cyborg-client/client/config"
 )
 
-var timestampCh <-chan analysis.Timestampdata
+var timestampCh <-chan []int64
 
 // GetData parses REST request
 func GetData(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +32,7 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 }
 
 // Main is main func in robotserver-package
-func serverMain(timestampdataChLocal <-chan analysis.Timestampdata) {
+func serverMain(timestampdataChLocal <-chan []int64) {
 	// global chan
 	timestampCh = timestampdataChLocal
 	router := mux.NewRouter()

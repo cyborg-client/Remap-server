@@ -4,7 +4,7 @@ import (
 	"github.com/cyborg-client/client/analysis"
 )
 
-func splitterMain(timestampdataCh <-chan analysis.Timestampdata, registerNewClientCh <-chan clientTimestampCh) {
+func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan clientTimestampCh) {
 	activeClients := make([]clientTimestampCh, 100)
 	for {
 		select {
@@ -22,7 +22,7 @@ func splitterMain(timestampdataCh <-chan analysis.Timestampdata, registerNewClie
 	}
 }
 
-func Main(timestampdataChLocal <-chan analysis.Timestampdata) {
+func Main(timestampdataChLocal <-chan []int64) {
 	registerNewClientCh := make(chan clientTimestampCh)
 	go serverMain(timestampdataChLocal)
 	go splitterMain(timestampdataChLocal, registerNewClientCh)

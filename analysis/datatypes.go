@@ -1,3 +1,3 @@
 package analysis
 
-type Timestampdata []byte
+type Timestampdata []int64

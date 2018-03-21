@@ -1,7 +1,7 @@
 package config
 
 const(
-	MEAServerAddress = "127.0.0.1"
+	MEAServerAddress = "10.22.75.8"
 	MEAServerTcpPort = "12345"
 	MEAServerHTTPPort = "1234"
 	RobotServerPort = "8000"

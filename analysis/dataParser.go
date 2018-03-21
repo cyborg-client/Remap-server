@@ -1,50 +1,41 @@
 package analysis
 
 import (
-	"bufio"
-	"encoding/csv"
-	"io"
-	"os"
-	"strconv"
+
+	"github.com/cyborg-client/client/tcphttpclient"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-// TODO: find out how to syncronise all channels
-func Main(timeStampChannel chan<- Timestampdata) {
-	dat, err := os.Open("./sampledata/2017-10-20_MEA2_100rows_1sec.csv")
-	check(err)
-	reader := csv.NewReader(bufio.NewReader(dat))
-	timestampArray := make([][]byte, 0, 100)
-	reader.Read() // first line is info only
-
-	// read file
-	lc := 0
+func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
 	for {
-		record, err := reader.Read()
-		// Stop at EOF.
-		if err == io.EOF {
-			break
-		}
-		timestampArray = append(timestampArray, make([]byte, 60))
-		for i := 0; i < 60; i++ {
-			val, _ := strconv.Atoi(record[i])
-			if val < 0 {
-				timestampArray[lc][i] = byte(1)
-			} else {
-				timestampArray[lc][i] = byte(0)
+		var timestampTuple = make([]int64, 0, 2)
+		var effect float64
+		var average float64
+		var threshold float64
+		var MEAChannel int64
+		var timeStamp int64
+		average = 0
+		effect = 0.1
+		threshold = 5000000
+		timeStamp = 0
+
+		for {
+			record := <-tcpDataStreamCh
+			timeStamp += 100
+			for j := range record {
+				val := record[j]
+				// UPDATE FILTER
+				average = (1 - effect) * average + effect * float64(-val)
+				diff := float64(val) - average
+
+				// SEND TIMESTAMP
+				if diff > threshold {
+					timestampTuple = make([]int64, 0, 2)
+					MEAChannel = int64(j)
+					timestampTuple = append(timestampTuple, timeStamp)
+					timestampTuple = append(timestampTuple, MEAChannel)
+					timeStampChannel <- timestampTuple
+				}
 			}
-		}
-		lc++
-	}
-
-	for {
-		for row := 0; row < 100; row++ {
-			timeStampChannel <- timestampArray[row]
 		}
 	}
 }
