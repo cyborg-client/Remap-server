@@ -1,70 +1,40 @@
 package analysis
 
 import (
-	"fmt"
-
 	"github.com/cyborg-client/client/tcphttpclient"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-// TODO: find out how to syncronise all channels
-func Main(timeStampChannel chan<- []byte, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
+func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
 	for {
-		/*dat, err := os.Open("/Users/jonasdammen/Development/code/src/github.com/cyborg-client/client/sampledata/2017-10-20_MEA2_100rows_1sec.csv")
-		check(err)
-		reader := csv.NewReader(bufio.NewReader(dat))
+		var timestampTuple = make([]int64, 0, 2)
+		var effect float64
+		var average float64
+		var threshold float64
+		var MEAChannel int64
+		var timeStamp int64
+		average = 0
+		effect = 0.1
+		threshold = 5000000
+		timeStamp = 0
 
-		*/
-
-		var timestampArray= make([][]byte, 0, 10)
-		i := 0
-		cols := 0
-		//reader.Read() // first line is info only
 		for {
-			//record, err := reader.Read()
 			record := <-tcpDataStreamCh
-			fmt.Println(record)
-			if i == 0 {
-				cols = len(record)
-			}
-			timestampArray = append(timestampArray, make([]byte, cols-1))
-			// Stop at EOF.
-			/*if err == io.EOF {
-				fmt.Println("Breaking due to EOF")
-				break
-			}*/
-			//fmt.Println("reading values")
-
+			timeStamp += 100
 			for j := range record {
-				if j != 0 { // first value is timestamp
-					val := record[j]
-					if val < 0 {
-						timestampArray[i][j-1] = 1
+				val := record[j]
+				// UPDATE FILTER
+				average = (1 - effect) * average + effect * float64(-val)
+				diff := float64(val) - average
 
-					} else {
-						timestampArray[i][j-1] = 0
-					}
+				// SEND TIMESTAMP
+				if diff > threshold {
+					timestampTuple = make([]int64, 0, 2)
+					MEAChannel = int64(j)
+					timestampTuple = append(timestampTuple, timeStamp)
+					timestampTuple = append(timestampTuple, MEAChannel)
+					timeStampChannel <- timestampTuple
 				}
 			}
-			/*
-		fmt.Println("Record current line")
-		fmt.Println((record))
-		fmt.Println("TSA current line")
-		fmt.Println(timestampArray[i])
-		fmt.Println("TSA current length")
-		fmt.Println(len(timestampArray))
-		*/
-			//fmt.Println("Pushing one array to channel")
-			//fmt.Println(timestampArray[i])
-			timeStampChannel <- timestampArray[i]
-			i++
 		}
-		fmt.Println("Sent ", i, " lines");
-		//check(err)	r := csv.NewReader(strings.NewReader(in))
 	}
 }
