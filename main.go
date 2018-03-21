@@ -4,7 +4,6 @@ import (
 	"github.com/cyborg-client/client/datatypes"
 	"github.com/cyborg-client/client/tcphttpclient"
 	"github.com/cyborg-client/client/analysis"
-	"github.com/cyborg-client/client/config"
 	"github.com/cyborg-client/client/robotserver"
 	"fmt"
 )

@@ -3,7 +3,12 @@ package analysis
 import (
 
 	"github.com/cyborg-client/client/tcphttpclient"
+	"sync/atomic"
 )
+
+var TimeStamp int64
+
+
 
 func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
 	for {
@@ -12,15 +17,14 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 		var average float64
 		var threshold float64
 		var MEAChannel int64
-		var timeStamp int64
 		average = 0
 		effect = 0.1
 		threshold = 5000000
-		timeStamp = 0
+		TimeStamp = 0
 
 		for {
 			record := <-tcpDataStreamCh
-			timeStamp += 100
+			atomic.AddInt64(&TimeStamp, 100)
 			for j := range record {
 				val := record[j]
 				// UPDATE FILTER
@@ -31,7 +35,7 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 				if diff > threshold {
 					timestampTuple = make([]int64, 0, 2)
 					MEAChannel = int64(j)
-					timestampTuple = append(timestampTuple, timeStamp)
+					timestampTuple = append(timestampTuple, atomic.LoadInt64(&TimeStamp))
 					timestampTuple = append(timestampTuple, MEAChannel)
 					timeStampChannel <- timestampTuple
 				}

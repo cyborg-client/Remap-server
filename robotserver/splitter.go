@@ -1,29 +1,25 @@
 package robotserver
 
-import (
-	"github.com/cyborg-client/client/analysis"
-)
-
-func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan clientTimestampCh) {
-	activeClients := make([]clientTimestampCh, 100)
+func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan splitterRequest, deleteClientCh <-chan splitterRequest) {
+	activeClients := make(map[int]splitterRequest)
 	for {
 		select {
 		case client := <-registerNewClientCh:
-			activeClients = append(activeClients, client)
+			activeClients[client.ID] = client
 		case msg := <-timestampdataCh:
-			ok := false
-			for i := 0; i < len(activeClients); i++ {
-				activeClients[i], ok <- msg
-				if !ok {
-					activeClients = append(activeClients[:i], activeClients[i+1:]...)
-				}
+			for _, v := range activeClients {
+				v.DataCh <- msg
 			}
+		case client := <-deleteClientCh:
+			delete(activeClients, client.ID)
 		}
 	}
 }
 
-func Main(timestampdataChLocal <-chan []int64) {
-	registerNewClientCh := make(chan clientTimestampCh)
-	go serverMain(timestampdataChLocal)
-	go splitterMain(timestampdataChLocal, registerNewClientCh)
+func Main(timestampdataCh <-chan []int64) {
+	registerNewClientCh := make(chan splitterRequest)
+	deleteClientCh := make(chan splitterRequest)
+	go serverMain(timestampdataCh)
+	go splitterMain(timestampdataCh, registerNewClientCh, deleteClientCh)
+	select {}
 }
