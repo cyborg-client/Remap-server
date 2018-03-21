@@ -13,13 +13,9 @@ import (
 	"sync/atomic"
 )
 
-var timestampCh <-chan []int64
-
-
-type jsonStructure struct{
-	Payload [60]int64
-}
-
+// sendAndResetBucket sends the bucket array out on the websocket connection.
+// After sending the bucket onto the websocket, it sets all the element in the buffer
+// to zero, and sets the timeNow the last recorded time in analysis.
 func sendAndResetBucket(bucket *[]int64, ws *websocket.Conn, timeNow *int64){
 	b, _ := json.Marshal(bucket)
 	var jsonStr = []byte(b)
@@ -29,12 +25,13 @@ func sendAndResetBucket(bucket *[]int64, ws *websocket.Conn, timeNow *int64){
 		(*bucket)[i] = 0
 
 	}
-	fmt.Println(*bucket)
 	*timeNow = atomic.LoadInt64(&analysis.TimeStamp)
 }
 
 
-func ClientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan analysis.Timestampdata) {
+// clientHandler handles a websocket connection. It processes the timestampdata from the analysis module,
+// and puts them into their respective 60 buckets. When everyMs has passed, it calls the sendAndResetBucket function
+func clientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan analysis.Timestampdata) {
 	connectionClosedCh := make(chan bool)
 	go func(connectionClosedCh chan bool) {
 		_, err := ws.Read(make([]byte, 1))
@@ -65,7 +62,8 @@ func ClientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan analysis.Tim
 	}
 }
 
-// Main is main func in robotserver-package
+// serverMain is the entrypoint for the websocket server. Takes as input a channel with timestamp data from the
+// analysis module, two splitterRequest channels registering and deleting itself
 func serverMain(timestampdataCh <-chan []int64, registerNewClientCh chan<- splitterRequest, deleteClientCh chan<- splitterRequest) {
 	http.HandleFunc("/data/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Print(r.URL)
@@ -89,7 +87,7 @@ func serverMain(timestampdataCh <-chan []int64, registerNewClientCh chan<- split
 		clientStruct := splitterRequest{u1, dataCh}
 		registerNewClientCh <- clientStruct
 		websocket.Handler.ServeHTTP(func(ws *websocket.Conn) {
-			ClientHandler(ws, int64(ms), dataCh)
+			clientHandler(ws, int64(ms), dataCh)
 		}, w, r)
 		deleteClientCh <- clientStruct
 	})

@@ -37,7 +37,7 @@ func connectTCP(tcpDataStream chan<- TcpDataStream, stop <-chan bool) {
 			lr := io.LimitReader(conn, 60*4*config.SegmentLength)
 			_, err := lr.Read(buffer)
 			if err != nil {
-				panic(err)
+				panic("Network is too slow " + err.Error())
 			}
 
 			// Data received is in BigEndian, convert this to a int32 array

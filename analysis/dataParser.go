@@ -26,9 +26,9 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 			record := <-tcpDataStreamCh
 			atomic.AddInt64(&TimeStamp, 100)
 			for j := range record {
-				val := record[j]
+				val := -record[j]
 				// UPDATE FILTER
-				average = (1 - effect) * average + effect * float64(-val)
+				average = (1 - effect) * average + effect * float64(val)
 				diff := float64(val) - average
 
 				// SEND TIMESTAMP
