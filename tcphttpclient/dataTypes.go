@@ -14,11 +14,6 @@ const (
 
 type statusTcp int
 
-const (
-	start statusTcp = iota
-	stop
-)
-
 type startStopTcp int
 
 // TODO: Fill inn proper statuses

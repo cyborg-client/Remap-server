@@ -5,16 +5,15 @@ import (
 	"github.com/cyborg-client/client/datatypes"
 )
 
-func TcpHttpClient(
+func Main(
 	tcpDataStreamCh chan TcpDataStream,
-	tcpHttpClientStatusCh chan<- Status,
 	clientRequestCh <-chan datatypes.ClientRequest,
 ) {
 	// Channels
 	startStopTcpCh := make(chan startStopTcp)
 
 	// Create goroutines
-	go httpMain(clientRequestCh, startStopTcpCh, tcpHttpClientStatusCh)
+	go httpMain(clientRequestCh, startStopTcpCh)
 	go tcpMain(tcpDataStreamCh, startStopTcpCh)
 
 	select {}

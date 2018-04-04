@@ -9,13 +9,13 @@ import (
 	"net/http"
 )
 
-// requestOptions Struct representing the data which is sent to the MEA Server.
+// requestOptions is a struct representing the data which is sent to the MEA Server.
 type requestOptions struct {
 	SampleRate    int `json:"sample_rate""`
 	SegmentLength int `json:"segment_length""`
 }
 
-// requestRemoteServer Sends a Start / Stop post request to the MEA HTTP server.
+// requestRemoteServer sends a Start / Stop post request to the MEA HTTP server.
 func requestRemoteServer(start bool, sampleRate int, segmentLength int) bool {
 	// Generate the URI based on start parameter
 	var url string
@@ -54,7 +54,6 @@ func requestRemoteServer(start bool, sampleRate int, segmentLength int) bool {
 func httpMain(
 	clientRequestCh <-chan datatypes.ClientRequest,
 	startStopTcpCh chan<- startStopTcp,
-	tcpHttpClientStatusCh chan<- Status,
 ) {
 	for {
 		select {

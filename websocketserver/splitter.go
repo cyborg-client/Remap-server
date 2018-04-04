@@ -1,4 +1,4 @@
-package robotserver
+package websocketserver
 
 import (
 	"github.com/cyborg-client/client/errorhandling"
@@ -8,6 +8,9 @@ import (
 	"github.com/cyborg-client/client/config"
 )
 
+// splitterMain is a PUBSUB implementation, taking the data from timestampdataCh and broadcasting it to all subscribers. In order
+// to register as a subscriber, you must register yourself by sending a request on the registerNewClientCh. When you do no longer wish to
+// subscribe, you must delete yourself by sending a request on the deleteClientCh.
 func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan splitterRequest, deleteClientCh <-chan splitterRequest) {
 	activeClients := make(map[uuid.UUID]splitterRequest)
 	for {
@@ -31,7 +34,7 @@ func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan spl
 func Main(timestampdataCh <-chan []int64) {
 	registerNewClientCh := make(chan splitterRequest)
 	deleteClientCh := make(chan splitterRequest)
-	go serverMain(timestampdataCh, registerNewClientCh, deleteClientCh)
+	go serverMain(registerNewClientCh, deleteClientCh)
 	go splitterMain(timestampdataCh, registerNewClientCh, deleteClientCh)
 	http.HandleFunc("/stimulate", stimulateServer)
 	log.Fatal(http.ListenAndServe(":"+ config.StimulateServerPort, nil))

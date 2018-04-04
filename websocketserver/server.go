@@ -1,4 +1,4 @@
-package robotserver
+package websocketserver
 
 import (
 	"encoding/json"
@@ -62,9 +62,9 @@ func clientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan analysis.Tim
 	}
 }
 
-// serverMain is the entrypoint for the websocket server. Takes as input a channel with timestamp data from the
+// serverMain is the entry point for the websocket server. Takes as input a channel with timestamp data from the
 // analysis module, two splitterRequest channels registering and deleting itself
-func serverMain(timestampdataCh <-chan []int64, registerNewClientCh chan<- splitterRequest, deleteClientCh chan<- splitterRequest) {
+func serverMain(registerNewClientCh chan<- splitterRequest, deleteClientCh chan<- splitterRequest) {
 	http.HandleFunc("/data/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Print(r.URL)
 		// Get ID as variable

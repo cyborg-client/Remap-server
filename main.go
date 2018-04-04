@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/cyborg-client/client/analysis"
 	"github.com/cyborg-client/client/datatypes"
-	"github.com/cyborg-client/client/robotserver"
+	"github.com/cyborg-client/client/websocketserver"
 	"github.com/cyborg-client/client/tcphttpclient"
 )
 
@@ -13,10 +13,9 @@ func main() {
 
 	// Make channels
 	tcpDataStreamCh := make(chan tcphttpclient.TcpDataStream, 100)
-	tcpHttpClientStatusCh := make(chan tcphttpclient.Status)
 	clientRequestCh := make(chan datatypes.ClientRequest)
 
-	go tcphttpclient.TcpHttpClient(tcpDataStreamCh, tcpHttpClientStatusCh, clientRequestCh)
+	go tcphttpclient.Main(tcpDataStreamCh, clientRequestCh)
 
 	myReq := datatypes.ClientRequest{Request: tcphttpclient.Start}
 	myReqS := datatypes.ClientRequest{Request: tcphttpclient.Stop}
@@ -26,6 +25,6 @@ func main() {
 	//run data parser
 	timeStampChannel := make(chan []int64, 100)
 	go analysis.Main(timeStampChannel, tcpDataStreamCh)
-	go robotserver.Main(timeStampChannel)
+	go websocketserver.Main(timeStampChannel)
 	select {}
 }

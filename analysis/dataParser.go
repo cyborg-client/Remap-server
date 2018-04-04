@@ -5,8 +5,12 @@ import (
 	"sync/atomic"
 )
 
+// TimeStamp is a global variable used to synchronize the latest between modules. Must be read and written with
+// atomic.LoadInt64() and atomic.AddInt64()
 var TimeStamp int64
 
+// Main implements the analysis loop. Receives data from tcphttpclient, create the spike data and sends them to the
+// websocket server. In practice, it implements a low pass filter, using a floating cutoff.
 func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
 	for {
 		var timestampTuple = make([]int64, 0, 2)
