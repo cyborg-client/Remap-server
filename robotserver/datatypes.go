@@ -8,6 +8,6 @@ import (
 //type splitterRequest chan analysis.Timestampdata
 
 type splitterRequest struct {
-	ID uuid.UUID
+	ID     uuid.UUID
 	DataCh chan analysis.Timestampdata
 }

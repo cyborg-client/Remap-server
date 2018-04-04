@@ -32,10 +32,10 @@ Configuration is done by editing config/config.go. The entries should be self ex
 In order to retrieve data, you must open a websocket connection to the server.
 ### Get Data
 ```HTTP
-ws://<serverip>:<port>/data/<every-ms>/
+ws://<serverip>:<websocket-port>/data/<every-ms>/
 ```
 
-> `port` is defined in config/config.go, *WebSocketPort*. Default is 6480
+> `websocket-port` is defined in config/config.go, *WebSocketPort*. Default is 6480
 >
 > `every-ms` specifies the interval (in millisec) of received data packages
 
@@ -47,6 +47,20 @@ For *every-ms* milliseconds, the client sends an arary with the number of spikes
 **Example:**
 
 If *every-ms* is 60 000, <ch1> represents the number of spikes in channel 1 the last 60 seconds, <ch2> the number of spikes in channel 2 the last 60 seconds and so on.
+
+### Send stimulation
+
+You can stimulate a given channel by sending a POST request.
+```HTTP
+POST /stimulate
+Host: <serverip>
+
+{
+  "frequency": <frequency>,
+  "duration": <duration>,
+  "channel": <channel>
+}
+```
 
 ### Example websocket Client
 
@@ -79,4 +93,4 @@ Please note that this script **must** be run from a website not using https, as 
 - [x] Establish connection with MEA server
 - [x] Process data from the MEA Server
 - [x] Create a websocket interface serving the MEA data
-- [ ] Add support for stimulation of the MEA server
+- [x] Add support for stimulation of the MEA server

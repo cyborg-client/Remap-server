@@ -5,9 +5,10 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/cyborg-client/client/config"
+	"github.com/cyborg-client/client/errorhandling"
 	"io"
-	"net"
 	"log"
+	"net"
 )
 
 // connectTCP Creates an connection to the MEA database, and receives int32s. Puts those into the tcpDataStream channel.
@@ -17,7 +18,7 @@ func connectTCP(tcpDataStream chan<- TcpDataStream, stop <-chan bool) {
 	defer conn.Close()
 	if err != nil {
 		log.Println("Error in tcp.go: ", err)
-		panic(err)
+		errorhandling.Restart()
 	}
 	fmt.Println("Connected")
 
@@ -37,7 +38,8 @@ func connectTCP(tcpDataStream chan<- TcpDataStream, stop <-chan bool) {
 			lr := io.LimitReader(conn, 60*4*config.SegmentLength)
 			_, err := lr.Read(buffer)
 			if err != nil {
-				panic("Network is too slow " + err.Error())
+				log.Println("TCP Connection is too slow, restarting")
+				errorhandling.Restart()
 			}
 
 			// Data received is in BigEndian, convert this to a int32 array
@@ -51,7 +53,7 @@ func connectTCP(tcpDataStream chan<- TcpDataStream, stop <-chan bool) {
 				err = binary.Read(buf, binary.BigEndian, &t)
 				if err != nil {
 					log.Println("Error in tcp.go, bianry ready fail: ", err)
-					panic(err)
+					errorhandling.Restart()
 				}
 				meaSegment[i] = t
 			}

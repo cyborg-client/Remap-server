@@ -1,18 +1,15 @@
 package main
 
 import (
-	"github.com/cyborg-client/client/datatypes"
-	"github.com/cyborg-client/client/tcphttpclient"
-	"github.com/cyborg-client/client/analysis"
-	"github.com/cyborg-client/client/robotserver"
 	"fmt"
+	"github.com/cyborg-client/client/analysis"
+	"github.com/cyborg-client/client/datatypes"
+	"github.com/cyborg-client/client/robotserver"
+	"github.com/cyborg-client/client/tcphttpclient"
 )
 
-// "github.com/cyborg-client/client/datatypes"
-// "github.com/cyborg-client/client/tcphttpclient"
-
 func main() {
-	fmt.Print("MAIN")
+	fmt.Println("Started application")
 
 	// Make channels
 	tcpDataStreamCh := make(chan tcphttpclient.TcpDataStream, 100)
@@ -26,9 +23,9 @@ func main() {
 	clientRequestCh <- myReqS
 	clientRequestCh <- myReq
 
-	 //run data parser
+	//run data parser
 	timeStampChannel := make(chan []int64, 100)
 	go analysis.Main(timeStampChannel, tcpDataStreamCh)
 	go robotserver.Main(timeStampChannel)
-	select{}
+	select {}
 }

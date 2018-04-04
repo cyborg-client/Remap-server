@@ -1,7 +1,11 @@
 package robotserver
 
 import (
+	"github.com/cyborg-client/client/errorhandling"
 	"github.com/satori/go.uuid"
+	"log"
+	"net/http"
+	"github.com/cyborg-client/client/config"
 )
 
 func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan splitterRequest, deleteClientCh <-chan splitterRequest) {
@@ -10,7 +14,8 @@ func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan spl
 		select {
 		case client := <-registerNewClientCh:
 			if _, ok := activeClients[client.ID]; ok {
-				panic("UUID already exists")
+				log.Println("Error: UUID already exists")
+				errorhandling.Restart()
 			}
 			activeClients[client.ID] = client
 		case msg := <-timestampdataCh:
@@ -28,5 +33,7 @@ func Main(timestampdataCh <-chan []int64) {
 	deleteClientCh := make(chan splitterRequest)
 	go serverMain(timestampdataCh, registerNewClientCh, deleteClientCh)
 	go splitterMain(timestampdataCh, registerNewClientCh, deleteClientCh)
+	http.HandleFunc("/stimulate", stimulateServer)
+	log.Fatal(http.ListenAndServe(":"+ config.StimulateServerPort, nil))
 	select {}
 }

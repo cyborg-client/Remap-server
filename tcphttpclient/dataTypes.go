@@ -6,24 +6,22 @@ type TcpDataStream [60 * config.SegmentLength]int32
 
 type Status int
 
-const
-(
+const (
 	Start = iota
 	Stop
 	Stimulate
 )
 
-
 type statusTcp int
-const
-(
+
+const (
 	start statusTcp = iota
 	stop
 )
 
 type startStopTcp int
+
 // TODO: Fill inn proper statuses
-const
-(
+const (
 	status1 startStopTcp = iota
 )

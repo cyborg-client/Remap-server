@@ -1,34 +1,33 @@
 package robotserver
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/cyborg-client/client/analysis"
+	"github.com/cyborg-client/client/config"
+	"github.com/satori/go.uuid"
 	"golang.org/x/net/websocket"
 	"net/http"
-	"fmt"
-	"strconv"
 	"regexp"
-	"github.com/cyborg-client/client/analysis"
-	"github.com/satori/go.uuid"
-	"encoding/json"
-	"time"
+	"strconv"
 	"sync/atomic"
-	"github.com/cyborg-client/client/config"
+	"time"
 )
 
 // sendAndResetBucket sends the bucket array out on the websocket connection.
 // After sending the bucket onto the websocket, it sets all the element in the buffer
 // to zero, and sets the timeNow the last recorded time in analysis.
-func sendAndResetBucket(bucket *[]int64, ws *websocket.Conn, timeNow *int64){
+func sendAndResetBucket(bucket *[]int64, ws *websocket.Conn, timeNow *int64) {
 	b, _ := json.Marshal(bucket)
 	var jsonStr = []byte(b)
 	ws.Write(jsonStr)
 
-	for i := range *bucket{
+	for i := range *bucket {
 		(*bucket)[i] = 0
 
 	}
 	*timeNow = atomic.LoadInt64(&analysis.TimeStamp)
 }
-
 
 // clientHandler handles a websocket connection. It processes the timestampdata from the analysis module,
 // and puts them into their respective 60 buckets. When everyMs has passed, it calls the sendAndResetBucket function
@@ -45,20 +44,20 @@ func clientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan analysis.Tim
 	bucket := make([]int64, 60)
 	var timeNow int64
 	timeNow = atomic.LoadInt64(&analysis.TimeStamp)
-	for{
+	for {
 		// Connection closed
-		select{
-			case msg := <- dataCh:
-				bucket[msg[1]] += 1
-				if (msg[0] - timeNow) > (everyMs * 1000) {
-					sendAndResetBucket(&bucket, ws, &timeNow)
-				}
-			case <- connectionClosedCh:
-				return
-			case <- time.After(time.Millisecond):
-				if (atomic.LoadInt64(&analysis.TimeStamp) - timeNow) > (everyMs * 1000) {
-					sendAndResetBucket(&bucket, ws, &timeNow)
-				}
+		select {
+		case msg := <-dataCh:
+			bucket[msg[1]] += 1
+			if (msg[0] - timeNow) > (everyMs * 1000) {
+				sendAndResetBucket(&bucket, ws, &timeNow)
+			}
+		case <-connectionClosedCh:
+			return
+		case <-time.After(time.Millisecond):
+			if (atomic.LoadInt64(&analysis.TimeStamp) - timeNow) > (everyMs * 1000) {
+				sendAndResetBucket(&bucket, ws, &timeNow)
+			}
 		}
 	}
 }
@@ -71,7 +70,7 @@ func serverMain(timestampdataCh <-chan []int64, registerNewClientCh chan<- split
 		// Get ID as variable
 		re := regexp.MustCompile("^/data/(\\d+)/?$")
 		regexParsed := re.FindStringSubmatch(r.URL.String())
-		if ( len(regexParsed) != 2 ) {
+		if len(regexParsed) != 2 {
 			fmt.Println("Returning error")
 			w.WriteHeader(http.StatusNotFound)
 			return
