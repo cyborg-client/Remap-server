@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"time"
 	"sync/atomic"
+	"github.com/cyborg-client/client/config"
 )
 
 // sendAndResetBucket sends the bucket array out on the websocket connection.
@@ -91,7 +92,7 @@ func serverMain(timestampdataCh <-chan []int64, registerNewClientCh chan<- split
 		}, w, r)
 		deleteClientCh <- clientStruct
 	})
-	http.ListenAndServe(":6780", nil)
+	http.ListenAndServe(":"+config.WebSocketPort, nil)
 
 	select {}
 }
