@@ -1,3 +1,4 @@
+// Package errorhandling provides errorhandling functionality, such as restart
 package errorhandling
 
 import (

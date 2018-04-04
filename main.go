@@ -12,13 +12,13 @@ func main() {
 	fmt.Println("Started application")
 
 	// Make channels
-	tcpDataStreamCh := make(chan tcphttpclient.TcpDataStream, 100)
+	tcpDataStreamCh := make(chan tcphttpclient.Segment, 100)
 	clientRequestCh := make(chan datatypes.ClientRequest)
 
 	go tcphttpclient.Main(tcpDataStreamCh, clientRequestCh)
 
-	myReq := datatypes.ClientRequest{Request: tcphttpclient.Start}
-	myReqS := datatypes.ClientRequest{Request: tcphttpclient.Stop}
+	myReq := datatypes.ClientRequest{Request: datatypes.Start}
+	myReqS := datatypes.ClientRequest{Request: datatypes.Stop}
 	clientRequestCh <- myReqS
 	clientRequestCh <- myReq
 

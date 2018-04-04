@@ -1,3 +1,4 @@
+// Package analysis implements the parsing of raw MEA data into spike data.
 package analysis
 
 import (
@@ -11,7 +12,7 @@ var TimeStamp int64
 
 // Main implements the analysis loop. Receives data from tcphttpclient, create the spike data and sends them to the
 // websocket server. In practice, it implements a low pass filter, using a floating cutoff.
-func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.TcpDataStream) {
+func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.Segment) {
 	for {
 		var timestampTuple = make([]int64, 0, 2)
 		var effect float64

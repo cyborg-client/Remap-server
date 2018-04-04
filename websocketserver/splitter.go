@@ -30,12 +30,12 @@ func splitterMain(timestampdataCh <-chan []int64, registerNewClientCh <-chan spl
 		}
 	}
 }
-
-func Main(timestampdataCh <-chan []int64) {
+// Main is the entry point for the websocketserver. Requires timestampdataCh, which expects parsed data from the analysis package.
+func Main(parsedDataCh <-chan []int64) {
 	registerNewClientCh := make(chan splitterRequest)
 	deleteClientCh := make(chan splitterRequest)
 	go serverMain(registerNewClientCh, deleteClientCh)
-	go splitterMain(timestampdataCh, registerNewClientCh, deleteClientCh)
+	go splitterMain(parsedDataCh, registerNewClientCh, deleteClientCh)
 	http.HandleFunc("/stimulate", stimulateServer)
 	log.Fatal(http.ListenAndServe(":"+ config.StimulateServerPort, nil))
 	select {}

@@ -31,7 +31,7 @@ func sendAndResetBucket(bucket *[]int64, ws *websocket.Conn, timeNow *int64) {
 
 // clientHandler handles a websocket connection. It processes the timestampdata from the analysis module,
 // and puts them into their respective 60 buckets. When everyMs has passed, it calls the sendAndResetBucket function
-func clientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan analysis.Timestampdata) {
+func clientHandler(ws *websocket.Conn, everyMs int64, dataCh <-chan []int64) {
 	connectionClosedCh := make(chan bool)
 	go func(connectionClosedCh chan bool) {
 		_, err := ws.Read(make([]byte, 1))
@@ -83,7 +83,7 @@ func serverMain(registerNewClientCh chan<- splitterRequest, deleteClientCh chan<
 		}
 		// Register as listener
 		u1 := uuid.Must(uuid.NewV4())
-		dataCh := make(chan analysis.Timestampdata, 100)
+		dataCh := make(chan []int64, 100)
 		clientStruct := splitterRequest{u1, dataCh}
 		registerNewClientCh <- clientStruct
 		websocket.Handler.ServeHTTP(func(ws *websocket.Conn) {

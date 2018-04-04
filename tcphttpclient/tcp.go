@@ -9,11 +9,12 @@ import (
 	"io"
 	"log"
 	"net"
+	"github.com/cyborg-client/client/datatypes"
 )
 
 // connectTCP Creates an connection to the MEA database, and receives int32s. Puts those into the tcpDataStream channel.
 // If a message is received on the stop channel, the function returns after finishing the current batch.
-func connectTCP(tcpDataStream chan<- TcpDataStream, stop <-chan bool) {
+func connectTCP(tcpDataStream chan<- Segment, stop <-chan bool) {
 	conn, err := net.Dial("tcp", config.MEAServerAddress+":"+config.MEAServerTcpPort)
 	defer conn.Close()
 	if err != nil {
@@ -63,9 +64,10 @@ func connectTCP(tcpDataStream chan<- TcpDataStream, stop <-chan bool) {
 		}
 	}
 }
-
+// tcpMain defines the entrypoint for the TCP connection between the client and the MEA server. Requires segmentCh, which it sends
+// out received TCP data and startStopTcpCh, which controls when to start and stop the TCP connection.
 func tcpMain(
-	tcpDataStream chan<- TcpDataStream,
+	segmentCh chan<- Segment,
 	startStopTcpCh <-chan startStopTcp,
 ) {
 	{
@@ -75,10 +77,10 @@ func tcpMain(
 			select {
 			case s := <-startStopTcpCh:
 				// Received a start/stop message. If start => start connectTCP. If stop => send stop message on stopCh
-				if s == Start && !running {
-					go connectTCP(tcpDataStream, stopCh)
+				if s == datatypes.Start && !running {
+					go connectTCP(segmentCh, stopCh)
 					running = true
-				} else if running && s == Stop {
+				} else if running && s == datatypes.Stop {
 					stopCh <- true
 					running = false
 				}

@@ -2,21 +2,7 @@ package tcphttpclient
 
 import "github.com/cyborg-client/client/config"
 
-type TcpDataStream [60 * config.SegmentLength]int32
-
-type Status int
-
-const (
-	Start = iota
-	Stop
-	Stimulate
-)
-
-type statusTcp int
+// Segment is a raw MEA segment from the MEA server
+type Segment [60 * config.SegmentLength]int32
 
 type startStopTcp int
-
-// TODO: Fill inn proper statuses
-const (
-	status1 startStopTcp = iota
-)

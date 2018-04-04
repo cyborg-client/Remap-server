@@ -50,7 +50,9 @@ func requestRemoteServer(start bool, sampleRate int, segmentLength int) bool {
 		return false
 	}
 }
-
+// httpMain defines the entrypoint for the http client, which sends START/STOP to the MEA server. Requires clientRequestCh, which it
+// accepts Start or Stop, defining to send a start or stop request to the MEA server. Requires startStopTcpCh, which it uses to start/stop
+// the tcp connection.
 func httpMain(
 	clientRequestCh <-chan datatypes.ClientRequest,
 	startStopTcpCh chan<- startStopTcp,
@@ -58,11 +60,11 @@ func httpMain(
 	for {
 		select {
 		case req := <-clientRequestCh:
-			if req.Request == Start {
+			if req.Request == datatypes.Start {
 				if requestRemoteServer(true, config.SampleRate, config.SegmentLength) {
-					startStopTcpCh <- Start
+					startStopTcpCh <- datatypes.Start
 				}
-			} else if req.Request == Stop {
+			} else if req.Request == datatypes.Stop {
 				requestRemoteServer(false, 0, 0)
 			}
 		}
