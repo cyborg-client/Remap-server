@@ -1,7 +1,34 @@
 # EiT-Client
 
-A client providing MEA timestamp data through a websocket connection. The user can specify how often it should receive data, which again defines the resolution of the data.
-## Robotserver API
+A client providing MEA buckets of spike data, where each bucket contains the number of spikes since the last transmission. This is served through a websocket connection. The user can specify how often it should receive data, which again defines the resolution of the data. The client is written in golang.
+
+## Usage
+### Requirements
+golang.org/x/net/websocket and guithub.com/satori/go.uuid are needed to run the application.
+```bash
+go get golang.org/x/net/websocket
+go get github.com/satori/go.uuid
+```
+
+You also need to have an MEA server running. If you do not have one, a simulator can be found at https://github.com/cyborg-client/offline-server
+
+### Installation
+In order to install the client, simply use go get
+```bash
+go get github.com/cyborg-client/client
+```
+
+### Running
+Assuming proper gopath setup, start the application with
+```bash
+go run $GOPATH/src/github.com/cyborg-client/client/main.go
+```
+
+### Config
+
+Configuration is done by editing config/config.go. The entries should be self explanatory.
+
+## Websocket API
 In order to retrieve data, you must open a websocket connection to the server.
 ### Get Data
 ```HTTP
@@ -19,7 +46,34 @@ For *every-ms* milliseconds, the client sends an arary with the number of spikes
 ```
 **Example:**
 
-If *every-ms* is 60 000, <ch1> represents the number of spikes the first second, <ch2> the number of spikes the next second and so on.
+If *every-ms* is 60 000, <ch1> represents the number of spikes in channel 1 the last 60 seconds, <ch2> the number of spikes in channel 2 the last 60 seconds and so on.
+
+### Example websocket Client
+
+If you wish to test if the client is running properly, you can use the following javascript code snippet.
+
+```javascript
+(() => {
+
+let ws = new WebSocket('ws://129.241.187.141:6780/data/1000/');
+ws.onmessage = (msg) => {
+    console.log(JSON.parse(msg.data));
+};
+
+ws.onclose = () => {
+    console.log("Server closed connection.")
+};
+
+// Closes the connection after 5 seconds
+ws.onopen = () => {
+    setTimeout(() => {
+        ws.close();
+        console.log('We closed connection.');
+    }, 5000);
+};
+})();
+```
+Please note that this script **must** be run from a website not using https, as the client does not support SSL.
 
 ### Roadmap
 - [x] Establish connection with MEA server
