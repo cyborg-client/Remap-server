@@ -40,7 +40,7 @@ ws://<serverip>:<websocket-port>/data/<every-ms>/
 > `every-ms` specifies the interval (in millisec) of received data packages
 
 ### Returned Data Format
-For *every-ms* milliseconds, the client sends an arary with the number of spikes per time interval.
+For *every-ms* milliseconds, the client sends an array with the number of spikes per time interval.
 ```
 [<ch1>, <ch2>,<ch3>, ... , <ch60>]
 ```
