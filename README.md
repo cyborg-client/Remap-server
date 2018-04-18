@@ -1,4 +1,4 @@
-# EiT-Client
+# Remap Server
 
 A client providing MEA buckets of spike data, where each bucket contains the number of spikes since the last transmission. This is served through a websocket connection. The user can specify how often it should receive data, which again defines the resolution of the data. The client is written in golang.
 
