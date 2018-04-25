@@ -15,13 +15,13 @@ You also need to have an MEA server running. If you do not have one, a simulator
 ### Installation
 In order to install the client, simply use go get
 ```bash
-go get github.com/cyborg-client/client
+go get github.com/cyborg-client/Remap-server
 ```
 
 ### Running
 Assuming proper gopath setup, start the application with
 ```bash
-go run $GOPATH/src/github.com/cyborg-client/client/main.go
+go run $GOPATH/src/github.com/cyborg-client/Remap-server/main.go
 ```
 
 ### Config
