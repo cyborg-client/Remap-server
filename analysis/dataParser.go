@@ -19,7 +19,7 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 		var average float64
 		var threshold float64
 		var MEAChannel int64
-		average = 0
+		//	average = 0
 		effect = 0.1
 		threshold = 5000000
 		TimeStamp = 0
