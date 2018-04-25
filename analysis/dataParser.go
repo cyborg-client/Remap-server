@@ -24,22 +24,29 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 		threshold = 5000000
 		TimeStamp = 0
 
+		var wasActive = make([]int8, 60, 60)
+		var averages = make([]float64, 60, 60)
+
 		for {
 			record := <-tcpDataStreamCh
 			atomic.AddInt64(&TimeStamp, 100)
 			for j := range record {
 				val := -record[j]
 				// UPDATE FILTER
-				average = (1-effect)*average + effect*float64(val)
+				averages[j] = (1 - effect) * averages[j] + effect * float64(val) // UPDATES FILTER
 				diff := float64(val) - average
 
 				// SEND TIMESTAMP
-				if diff > threshold {
+				if diff > threshold && wasActive[j] == 0 {
+					wasActive[j] = 1
 					timestampTuple = make([]int64, 0, 2)
 					MEAChannel = int64(j)
 					timestampTuple = append(timestampTuple, atomic.LoadInt64(&TimeStamp))
 					timestampTuple = append(timestampTuple, MEAChannel)
 					timeStampChannel <- timestampTuple
+				}
+				if wasActive[j] == 1 {
+					wasActive[j] = 0
 				}
 			}
 		}
