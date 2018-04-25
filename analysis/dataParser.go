@@ -34,7 +34,7 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 				val := -record[j]
 				// UPDATE FILTER
 				averages[j] = (1 - effect) * averages[j] + effect * float64(val) // UPDATES FILTER
-				diff := float64(val) - average
+				diff := float64(val) - averages[j]
 
 				// SEND TIMESTAMP
 				if diff > threshold && wasActive[j] == 0 {
