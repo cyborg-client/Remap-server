@@ -16,7 +16,7 @@ func Main(timeStampChannel chan<- []int64, tcpDataStreamCh <-chan tcphttpclient.
 	for {
 		var timestampTuple = make([]int64, 0, 2)
 		var effect float64
-		var average float64
+		//var average float64
 		var threshold float64
 		var MEAChannel int64
 		//	average = 0
