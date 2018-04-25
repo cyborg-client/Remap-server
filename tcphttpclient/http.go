@@ -3,8 +3,8 @@ package tcphttpclient
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/cyborg-client/client/config"
-	"github.com/cyborg-client/client/datatypes"
+	"github.com/cyborg-client/Remap-server/config"
+	"github.com/cyborg-client/Remap-server/datatypes"
 	"log"
 	"net/http"
 )

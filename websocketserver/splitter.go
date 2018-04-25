@@ -1,11 +1,11 @@
 package websocketserver
 
 import (
-	"github.com/cyborg-client/client/errorhandling"
+	"github.com/cyborg-client/Remap-server/errorhandling"
 	"github.com/satori/go.uuid"
 	"log"
 	"net/http"
-	"github.com/cyborg-client/client/config"
+	"github.com/cyborg-client/Remap-server/config"
 )
 
 // splitterMain is a PUBSUB implementation, taking the data from timestampdataCh and broadcasting it to all subscribers. In order

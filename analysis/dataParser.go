@@ -2,7 +2,7 @@
 package analysis
 
 import (
-	"github.com/cyborg-client/client/tcphttpclient"
+	"github.com/cyborg-client/Remap-server/tcphttpclient"
 	"sync/atomic"
 )
 

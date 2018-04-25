@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/cyborg-client/client/config"
-	"github.com/cyborg-client/client/errorhandling"
+	"github.com/cyborg-client/Remap-server/config"
+	"github.com/cyborg-client/Remap-server/errorhandling"
 	"io"
 	"log"
 	"net"
-	"github.com/cyborg-client/client/datatypes"
+	"github.com/cyborg-client/Remap-server/datatypes"
 )
 
 // connectTCP Creates an connection to the MEA database, and receives int32s. Puts those into the tcpDataStream channel.

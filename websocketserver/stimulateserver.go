@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"bytes"
-	"github.com/cyborg-client/client/config"
+	"github.com/cyborg-client/Remap-server/config"
 	"log"
 )
 

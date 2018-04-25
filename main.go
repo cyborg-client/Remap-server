@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/cyborg-client/client/analysis"
-	"github.com/cyborg-client/client/datatypes"
-	"github.com/cyborg-client/client/websocketserver"
-	"github.com/cyborg-client/client/tcphttpclient"
+	"github.com/cyborg-client/Remap-server/analysis"
+	"github.com/cyborg-client/Remap-server/datatypes"
+	"github.com/cyborg-client/Remap-server/websocketserver"
+	"github.com/cyborg-client/Remap-server/tcphttpclient"
 )
 
 func main() {

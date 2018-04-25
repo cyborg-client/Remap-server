@@ -3,7 +3,7 @@ package tcphttpclient
 
 import (
 	//"fmt"
-	"github.com/cyborg-client/client/datatypes"
+	"github.com/cyborg-client/Remap-server/datatypes"
 )
 
 // Main is the entrypoint for the tcphttpclient package. Requires tcpDataStreamCh which it outputs the received TCP data

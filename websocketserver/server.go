@@ -3,8 +3,8 @@ package websocketserver
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cyborg-client/client/analysis"
-	"github.com/cyborg-client/client/config"
+	"github.com/cyborg-client/Remap-server/analysis"
+	"github.com/cyborg-client/Remap-server/config"
 	"github.com/satori/go.uuid"
 	"golang.org/x/net/websocket"
 	"net/http"
