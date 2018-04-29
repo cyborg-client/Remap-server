@@ -89,6 +89,23 @@ ws.onopen = () => {
 ```
 Please note that this script **must** be run from a website not using https, as the client does not support SSL.
 
+## Documentation
+
+The source code is documented with GoDoc. An offline version of the documentation can be found in the docs folder.
+You can read these by opening `index.html` or navigating to https://cyborg-client.github.io/Remap-server/.
+Please note that GoDocs does not really support offline docs as of now, and some links are not functioning.
+If you want to use all the GoDocs features, you can run a local GoDocs server by running the following
+
+```
+go get golang.org/x/tools/cmd/godoc
+godoc -http=:6060 -goroot=$GOPATH/src/github.com/cyborg-client/Remap-server
+```
+
+In any web browser, navigate to `http://localhost:6060/pkg/github.com/cyborg-client/Remap-server/`
+
+**Note:** When using the local godocs server, in order to show unexported functions, you must pass the ?m=all URL
+parameter. For instance `http://localhost:6060/pkg/github.com/cyborg-client/Remap-server/websocketserver/?m=all`
+
 ### Roadmap
 - [x] Establish connection with MEA server
 - [x] Process data from the MEA Server
