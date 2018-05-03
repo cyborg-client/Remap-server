@@ -1,7 +1,7 @@
 package config
 
 const (
-	MEAServerAddress  = "10.22.73.224"
+	MEAServerAddress  = "127.0.0.1"
 	MEAServerTcpPort  = "12345"
 	MEAServerHTTPPort = "1234"
 	WebSocketPort     = "6780"
